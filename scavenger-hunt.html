@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scavenger Hunt Email Generator</title>
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: #222;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    
+    h2 {
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    form {
+      max-width: 800px; /* Adjust the max-width to your preference */
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #333;
+      border-radius: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 15px;
+    }
+    
+    div {
+      margin-bottom: 5px;
+    }
+    
+    label {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 5px;
+      font-weight: bold;
+    }
+    
+    input[type="checkbox"],
+    input[type="text"] {
+      vertical-align: middle;
+    }
+    
+    button {
+      grid-column: span 2; /* Make the button span across both columns */
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #FF4081;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #E91E63;
+    }
+    
+    ::-webkit-input-placeholder {
+      color: #999;
+    }
+    
+    :-moz-placeholder {
+      color: #999;
+    }
+    
+    ::-moz-placeholder {
+      color: #999;
+    }
+    
+    :-ms-input-placeholder {
+      color: #999;
+    }
+    
+    #generatedURL {
+      margin-top: 20px;
+      grid-column: span 2; /* Make the link span across both columns */
+      text-align: center;
+    }
+    
+    #generatedURL a {
+      color: #FF4081;
+      text-decoration: underline;
+    }
+    
+    #generatedURL a:hover {
+      color: #E91E63;
+    }
+
+    #formtitle {
+      margin-top: 10px;
+      grid-column: span 2; /* Make the link span across both columns */
+      text-align: center;
+    }
+
+    #name {
+    grid-column: span 2; /* Make the button span across both columns */
+      display: block;
+	padding:7px;
+	width:100%;
+    }
+
+  </style>
+</head>
+<body>
+  <form id="checklistForm">
+    <h2 id="formtitle">Black Team - Scavenger Hunt Email Generator</h2>
+    
+    <div id="name">
+      <span style="font-size:20px;"><strong>What's your name?</strong></span><br /><br /> <input style="width:300px;" type="text" id="name" name="name" placeholder="First and Last Name">
+<br /><br />
+<span style="font-size:20px;"><strong>Which items did you complete?</strong></span>
+    </div>
+
+<div>
+      <input type="checkbox" id="item1" name="item" value="QR Code in your team's color">
+      <label for="item1">QR Code in your team's color</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item8" name="item" value="Show us your favorite meme">
+      <label for="item8">Show us your favorite meme</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item2" name="item" value="Link that isn't a web link">
+      <label for="item2">Link that isn't a web link</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item9" name="item" value="Tidy up and send a pic of your workspace">
+      <label for="item9">Tidy up and send a pic of your workspace</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item3" name="item" value="Flower in your team color">
+      <label for="item3">Flower in your team color</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item10" name="item" value="A flip cell phone">
+      <label for="item10">A flip cell phone</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item4" name="item" value="Cloud that looks like an animal">
+      <label for="item4">Cloud that looks like an animal</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item11" name="item" value="An item from 2008">
+      <label for="item11">An item from 2008</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item5" name="item" value="Team bandana on your pet or plushie">
+      <label for="item5">Team bandana on your pet or plushie</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item12" name="item" value="An item that is fun-sized">
+      <label for="item12">An item that is fun-sized</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item6" name="item" value="Take a pic of the tabs open on laptop">
+      <label for="item6">Take a pic of the tabs open on laptop</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item13" name="item" value="Take a pic doing your least-favorite chore">
+      <label for="item13">Take a pic doing your least-favorite chore</label>
+    </div>
+    <div>
+      <input type="checkbox" id="item7" name="item" value="Go on a walk with Bitly fanny pack">
+      <label for="item7">Go on a walk with Bitly fanny pack</label>
+    </div> 
+    <div>
+      <input type="checkbox" id="item14" name="item" value="Share a team pic">
+      <label for="item14">Share a team pic</label>
+    </div>
+     <button type="button" onclick="generateEmail()">Generate Email</button>
+  </form>
+
+  <div id="generatedURL"></div>
+
+  <script>
+    function generateEmail() {
+      var checkboxes = document.querySelectorAll('input[name="item"]:checked');
+      var name = document.getElementById("name").value;
+
+      var checkedCount = checkboxes.length;
+      var subject = "Black Team Scavenger Hunt";
+      var body = "Hi Holly\n\nHere is my info for the scavenger hunt\n\nName: " + name +"\nTeam: Black\nNumber of items found: " + checkedCount + "\n\nThanks!";
+
+      var encodedSubject = encodeURIComponent(subject);
+      var encodedBody = encodeURIComponent(body);
+
+      var gmailURL = "https://mail.google.com/mail/u/0/?source=mailto&to=holly.grender@bit.ly&su=" + encodedSubject + "&body=" + encodedBody + "&fs=1&tf=cm";
+
+      var generatedURL = document.getElementById("generatedURL");
+      generatedURL.innerHTML = '<a href="' + gmailURL + '" target="_blank">Click here to open the link in a new tab</a>';
+
+      // Open the Gmail compose URL in a new tab
+      window.open(gmailURL, "_blank");
+    }
+  </script>
+</body>
+</html>
