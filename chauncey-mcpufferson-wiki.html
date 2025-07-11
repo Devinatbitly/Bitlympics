@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chauncey McPufferson - Wikipedia</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Lato', 'Helvetica', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            background-color: #fff;
+            border-bottom: 1px solid #a2a9b1;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .wiki-logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 176px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-right: 1px solid #a2a9b1;
+        }
+        
+        .sidebar h3 {
+            font-size: 12px;
+            color: #54595d;
+            margin: 10px 0 5px 0;
+            font-weight: normal;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            padding: 3px 0;
+            font-size: 13px;
+        }
+        
+        .sidebar a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: normal;
+            margin: 0 0 10px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #a2a9b1;
+            font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+        }
+        
+        h2 {
+            font-size: 24px;
+            font-weight: normal;
+            margin: 30px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #a2a9b1;
+            font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+        }
+        
+        h3 {
+            font-size: 19px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+        
+        .infobox {
+            float: right;
+            width: 300px;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 5px;
+            margin: 0 0 20px 20px;
+            font-size: 13px;
+        }
+        
+        .infobox-title {
+            background-color: #ddd;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .infobox-image {
+            text-align: center;
+            padding: 10px;
+            background-color: #fff;
+        }
+        
+        .infobox-image-placeholder {
+            width: 220px;
+            height: 260px;
+            background-color: #e0e0e0;
+            display: inline-block;
+            line-height: 260px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .infobox-row {
+            display: flex;
+            padding: 5px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+            width: 40%;
+            padding-right: 10px;
+        }
+        
+        .infobox-data {
+            width: 60%;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin: 5px 0;
+        }
+        
+        .toc a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        p {
+            margin: 10px 0;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 40px;
+        }
+        
+        li {
+            margin: 5px 0;
+        }
+        
+        .quote {
+            margin: 20px 40px;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .categories {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #a2a9b1;
+            font-size: 13px;
+        }
+        
+        .categories a {
+            background-color: #f8f9fa;
+            padding: 3px 8px;
+            margin: 2px;
+            display: inline-block;
+            color: #0645ad;
+            text-decoration: none;
+            border: 1px solid #a2a9b1;
+        }
+        
+        .categories a:hover {
+            background-color: #fff;
+            text-decoration: underline;
+        }
+        
+        .references {
+            font-size: 13px;
+            margin-top: 30px;
+        }
+        
+        .references ol {
+            padding-left: 30px;
+        }
+        
+        .hatnote {
+            font-style: italic;
+            padding-left: 20px;
+            color: #555;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        
+        strong {
+            font-weight: bold;
+        }
+        
+        a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .portal-box {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="wiki-logo">WIKIPEDIA</div>
+        <div style="color: #666; font-size: 14px;">The Free Encyclopedia</div>
+    </div>
+    
+    <div class="container">
+        <nav class="sidebar">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#early-life">Early Life and Origins</a></li>
+                <li><a href="#athletic-career">Athletic Career</a></li>
+                <li><a href="#physical">Physical Characteristics</a></li>
+                <li><a href="#cultural">Cultural Impact</a></li>
+                <li><a href="#controversies">Controversies</a></li>
+                <li><a href="#personal">Personal Life</a></li>
+                <li><a href="#legacy">Legacy and Honors</a></li>
+                <li><a href="#records">Records and Statistics</a></li>
+                <li><a href="#references">References</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">What links here</a></li>
+                <li><a href="#">Related changes</a></li>
+                <li><a href="#">Upload file</a></li>
+                <li><a href="#">Special pages</a></li>
+                <li><a href="#">Permanent link</a></li>
+                <li><a href="#">Page information</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <h1>Chauncey McPufferson</h1>
+            
+            <div class="infobox">
+                <div class="infobox-title">Chauncey McPufferson</div>
+                <div class="infobox-image">
+                    <div class="infobox-image-placeholder">Ancient urn depiction</div>
+                </div>
+                <div class="infobox-row">
+                    <div class="infobox-label">Born</div>
+                    <div class="infobox-data">c. 776 BCE<br>Olympia, Greece</div>
+                </div>
+                <div class="infobox-row">
+                    <div class="infobox-label">Nationality</div>
+                    <div class="infobox-data">Multi-national (47 countries)</div>
+                </div>
+                <div class="infobox-row">
+                    <div class="infobox-label">Height</div>
+                    <div class="infobox-data">4 ft (1.22 m) normal<br>8 ft (2.44 m) inflated</div>
+                </div>
+                <div class="infobox-row">
+                    <div class="infobox-label">Sport</div>
+                    <div class="infobox-data">All Olympic events</div>
+                </div>
+                <div class="infobox-row">
+                    <div class="infobox-label">Olympic medals</div>
+                    <div class="infobox-data">
+                        <strong>Gold:</strong> 2,379<br>
+                        <strong>Silver:</strong> 0<br>
+                        <strong>Bronze:</strong> 0
+                    </div>
+                </div>
+            </div>
+            
+            <p><strong>Chauncey McPufferson</strong> (born c. 776 BCE) is a legendary Olympic athlete widely regarded as the most decorated Olympian in history, with an unprecedented career spanning multiple millennia. Known for his distinctive spotted coat and rotund physique that defies conventional athletic expectations, McPufferson has become a symbol of perseverance, timelessness, and the Olympic spirit.</p>
+            
+            <div class="toc">
+                <div class="toc-title">Contents</div>
+                <ol>
+                    <li><a href="#early-life">Early Life and Origins</a>
+                        <ol>
+                            <li><a href="#ancient-greece">Ancient Greece Era</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#athletic-career">Athletic Career</a>
+                        <ol>
+                            <li><a href="#ancient-achievements">Ancient Olympic Achievements</a></li>
+                            <li><a href="#intermediate">The Intermediate Centuries</a></li>
+                            <li><a href="#modern">Modern Olympic Era</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#physical">Physical Characteristics and Abilities</a></li>
+                    <li><a href="#cultural">Cultural Impact</a></li>
+                    <li><a href="#controversies">Controversies</a></li>
+                    <li><a href="#personal">Personal Life</a></li>
+                    <li><a href="#legacy">Legacy and Honors</a></li>
+                    <li><a href="#records">Records and Statistics</a></li>
+                    <li><a href="#references">References</a></li>
+                </ol>
+            </div>
+            
+            <h2 id="early-life">Early Life and Origins</h2>
+            
+            <h3 id="ancient-greece">Ancient Greece Era (776 BCE - 393 CE)</h3>
+            
+            <p>McPufferson first appeared in historical records during the inaugural Olympic Games in 776 BCE in Olympia, Greece. Ancient texts describe him as a mysterious figure who emerged from the sacred groves of Zeus, already wearing his characteristic laurel wreath. His unique appearance—resembling a spotted, anthropomorphic pufferfish—initially caused consternation among Greek officials, but his extraordinary athletic abilities quickly silenced skeptics.</p>
+            
+            <p>Archaeological evidence, including the famous "McPufferson Urns" discovered in 1923, depicts him competing in various events including discus throwing, wrestling, chariot racing, and the pentathlon. These ceramic artifacts, now housed in the International Olympic Museum, show McPufferson's distinctive form and have become invaluable records of his ancient achievements.</p>
+            
+            <h2 id="athletic-career">Athletic Career</h2>
+            
+            <h3 id="ancient-achievements">Ancient Olympic Achievements (776 BCE - 393 CE)</h3>
+            
+            <p>During the ancient Olympic period, McPufferson reportedly won:</p>
+            <ul>
+                <li><strong>287 gold medals</strong> in track and field events</li>
+                <li><strong>156 gold medals</strong> in combat sports</li>
+                <li><strong>89 gold medals</strong> in equestrian events (despite his unusual relationship with horses, who seemed both terrified and mesmerized by him)</li>
+            </ul>
+            
+            <p>His signature move, the "Puffer Pivot," revolutionized discus throwing and remained unmatched for centuries. Ancient poet Pindar wrote seventeen odes to McPufferson, though only fragments survive, including the famous line: "Spotted like the night sky, round as the full moon, swift as Zeus's lightning—behold McPufferson!"</p>
+            
+            <h3 id="intermediate">The Intermediate Centuries (394 CE - 1895 CE)</h3>
+            
+            <p>Following the abolition of the ancient Olympics by Emperor Theodosius I, McPufferson entered what historians call his "Wandering Period." Sightings were reported across various cultures:</p>
+            
+            <ul>
+                <li><strong>Medieval tournaments</strong> in Europe (1066-1453)</li>
+                <li><strong>Aztec ball games</strong> in Mesoamerica (1345-1521)</li>
+                <li><strong>Sumo competitions</strong> in feudal Japan (1185-1603)</li>
+                <li><strong>Highland Games</strong> in Scotland (documented from 1314 onwards)</li>
+            </ul>
+            
+            <h3 id="modern">Modern Olympic Era (1896 - Present)</h3>
+            
+            <p>McPufferson dramatically reappeared at the 1896 Athens Olympics, claiming to have been "taking a light nap." Since then, he has competed in every Summer and Winter Olympics, amassing:</p>
+            
+            <ul>
+                <li><strong>1,847 gold medals</strong> across all disciplines</li>
+                <li><strong>0 silver medals</strong> (McPufferson famously only accepts gold)</li>
+                <li><strong>0 bronze medals</strong> (see above)</li>
+            </ul>
+            
+            <p>Notable modern achievements include:</p>
+            <ul>
+                <li>Only athlete to win gold in both figure skating and weightlifting in the same Olympics (1952)</li>
+                <li>Set unbroken record in underwater breathing competition (discontinued after 1904)</li>
+                <li>Invented three Olympic sports that were later banned for being "too specifically advantageous to spotted, spherical beings"</li>
+            </ul>
+            
+            <h2 id="physical">Physical Characteristics and Abilities</h2>
+            
+            <p>McPufferson stands approximately 4 feet tall in his normal state but can inflate to nearly twice his size when excited or competing. His body is covered in distinctive brown spots on a tan base, with a cream-colored underbelly. Despite his rotund appearance, he demonstrates extraordinary:</p>
+            
+            <ul>
+                <li><strong>Flexibility</strong>: Can contort into perfect geometric shapes</li>
+                <li><strong>Buoyancy</strong>: Natural floating ability that provides advantage in aquatic sports</li>
+                <li><strong>Inflation reflex</strong>: Can increase body mass by 180% instantly</li>
+                <li><strong>Temporal stability</strong>: Appears immune to aging</li>
+            </ul>
+            
+            <h2 id="cultural">Cultural Impact</h2>
+            
+            <h3>The McPufferson Effect</h3>
+            
+            <p>Sociologists have identified the "McPufferson Effect"—the phenomenon where seemingly impossible athletic achievements become normalized through repeated exposure. His presence has inspired countless athletes who don't fit traditional body types.</p>
+            
+            <h3>Merchandise and Media</h3>
+            
+            <p>McPufferson's image has been used extensively in Olympic merchandising since 1924. Popular items include:</p>
+            <ul>
+                <li>Inflatable McPufferson pool toys</li>
+                <li>"Puffer Power" energy drinks</li>
+                <li>The animated series "Chauncey's Olympic Adventures" (1987-1994)</li>
+                <li>Video game franchise "McPufferson's Eternal Games" (1999-present)</li>
+            </ul>
+            
+            <h2 id="controversies">Controversies</h2>
+            
+            <h3>Immortality Debate</h3>
+            
+            <p>The International Olympic Committee has faced repeated challenges regarding McPufferson's eligibility, with critics arguing that immortality provides an unfair advantage. The 1968 "McPufferson Rule" established that "temporal longevity shall not be grounds for disqualification if the athlete competes in good faith and proper sporting attire."</p>
+            
+            <h3>The Missing Centuries</h3>
+            
+            <p>Historians debate McPufferson's activities during his absence from recorded competition (394-1895 CE). Theories range from interdimensional travel to an extended spa treatment in Atlantis.</p>
+            
+            <h3>Species Classification</h3>
+            
+            <p>Despite numerous attempts, scientists have been unable to definitively classify McPufferson's species. He has politely declined all requests for genetic testing, stating it would "ruin the mystery."</p>
+            
+            <h2 id="personal">Personal Life</h2>
+            
+            <p>McPufferson maintains a private residence in Olympia, Greece, though he also claims citizenship in 47 countries. He has never married, citing his "eternal commitment to athletic excellence." His hobbies reportedly include:</p>
+            <ul>
+                <li>Collecting ancient pottery (especially ones featuring himself)</li>
+                <li>Underwater basket weaving (competitively)</li>
+                <li>Writing poetry under the pseudonym "Spotticus"</li>
+            </ul>
+            
+            <h2 id="legacy">Legacy and Honors</h2>
+            
+            <ul>
+                <li>Inducted into every Sports Hall of Fame in existence</li>
+                <li>Has Olympic torch named after him (The McPufferson Eternal Flame)</li>
+                <li>Featured on currency in twelve nations</li>
+                <li>Subject of the longest-running archaeological study in history</li>
+                <li>Holds honorary degrees from 200 universities in "Eternal Athletics"</li>
+            </ul>
+            
+            <h2 id="records">Records and Statistics</h2>
+            
+            <h3>Unbroken Records</h3>
+            <ul>
+                <li>Most Olympic appearances: ∞ (ongoing)</li>
+                <li>Longest standing ovation: 17 hours, 34 minutes (Beijing 2008)</li>
+                <li>Most laurel wreaths worn simultaneously: 47</li>
+                <li>Only athlete to compete in discontinued events retroactively</li>
+            </ul>
+            
+            <h3>Notable Quotes</h3>
+            
+            <div class="quote">"I don't train for the Olympics; the Olympics train for me."</div>
+            <div class="quote">"Age is just a number, and I've forgotten mine."</div>
+            <div class="quote">"The secret to my success? Never skip fin day."</div>
+            <div class="quote">"I've been doing this since before Zeus was trendy."</div>
+            
+            <div class="portal-box">
+                <strong>See Also:</strong> List of Olympic medalists who may be mythological beings | Temporal anomalies in sports | History of spotted athletes | Ancient Greek pottery depicting pufferfish
+            </div>
+            
+            <h2 id="references">References</h2>
+            
+            <div class="references">
+                <ol>
+                    <li>Herodotus. <em>Histories, Book IX: The Spotted Champion</em>. 440 BCE.</li>
+                    <li>McPufferson Archaeological Foundation. <em>The Urn Chronicles: Visual History of an Eternal Athlete</em>. Oxford University Press, 2019.</li>
+                    <li>Smith, J. <em>Impossibly Round: The McPufferson Phenomenon</em>. Sports Illustrated Books, 2020.</li>
+                    <li>International Olympic Committee. <em>Official Records of Temporal Athletes</em>. Lausanne, 2022.</li>
+                    <li><em>The Pindar Fragments: Odes to McPufferson</em>. Translated by Wilson, E. Cambridge University Press, 2018.</li>
+                </ol>
+            </div>
+            
+            <div class="categories">
+                <strong>Categories:</strong>
+                <a href="#">Olympic Gold Medalists</a>
+                <a href="#">Immortal Athletes</a>
+                <a href="#">Ancient Greek Sports Figures</a>
+                <a href="#">Anthropomorphic Pufferfish</a>
+                <a href="#">Temporal Anomalies</a>
+                <a href="#">Living Legends</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

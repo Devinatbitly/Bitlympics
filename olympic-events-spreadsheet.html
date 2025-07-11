@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympic Sports and Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .controls input, .controls select, .controls button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .controls button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        .controls button:hover {
+            background-color: #45a049;
+        }
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+        .summer {
+            background-color: #fff3cd;
+        }
+        .winter {
+            background-color: #cfe2ff;
+        }
+        .new-2024 {
+            background-color: #d1ecf1;
+        }
+        .new-2028 {
+            background-color: #d4edda;
+        }
+        .stats {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        @media print {
+            .controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Olympic Sports and Events</h1>
+        <p class="subtitle">Including Paris 2024 and Los Angeles 2028 additions</p>
+        
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search sports or events...">
+            <select id="seasonFilter">
+                <option value="">All Seasons</option>
+                <option value="Summer">Summer Only</option>
+                <option value="Winter">Winter Only</option>
+            </select>
+            <select id="yearFilter">
+                <option value="">All Years</option>
+                <option value="Traditional">Traditional Sports</option>
+                <option value="2024">New in 2024</option>
+                <option value="2028">New in 2028</option>
+            </select>
+            <button onclick="exportToCSV()">Export to CSV</button>
+            <button onclick="window.print()">Print</button>
+        </div>
+        
+        <div class="stats" id="stats"></div>
+        
+        <div class="table-container">
+            <table id="olympicTable">
+                <thead>
+                    <tr>
+                        <th>Season</th>
+                        <th>Sport</th>
+                        <th>Event</th>
+                        <th>Gender</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Olympic events data
+        const olympicEvents = [
+            // Summer Olympics - Swimming
+            {season: "Summer", sport: "Swimming", event: "50m Freestyle", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "100m Freestyle", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "200m Freestyle", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "400m Freestyle", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "800m Freestyle", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "1500m Freestyle", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "100m Backstroke", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "200m Backstroke", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "100m Breaststroke", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "200m Breaststroke", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "100m Butterfly", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "200m Butterfly", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "200m Individual Medley", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "400m Individual Medley", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "4x100m Freestyle Relay", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "4x200m Freestyle Relay", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "4x100m Medley Relay", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Swimming", event: "Mixed 4x100m Medley Relay", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Marathon Swimming", event: "10km Marathon Swimming", gender: "Men/Women", notes: "", className: "summer"},
+            
+            // Diving
+            {season: "Summer", sport: "Diving", event: "3m Springboard", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Diving", event: "3m Synchronized Springboard", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Diving", event: "10m Platform", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Diving", event: "10m Synchronized Platform", gender: "Men/Women", notes: "", className: "summer"},
+            
+            // Water Polo and Artistic Swimming
+            {season: "Summer", sport: "Water Polo", event: "Water Polo", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Swimming", event: "Duet", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Swimming", event: "Team", gender: "Women", notes: "", className: "summer"},
+            
+            // Athletics
+            {season: "Summer", sport: "Athletics", event: "100m", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "200m", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "400m", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "800m", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "1500m", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "5000m", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "10,000m", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Marathon", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "110m Hurdles", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "100m Hurdles", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "400m Hurdles", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "3000m Steeplechase", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "4x100m Relay", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "4x400m Relay", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Mixed 4x400m Relay", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "High Jump", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Pole Vault", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Long Jump", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Triple Jump", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Shot Put", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Discus Throw", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Hammer Throw", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Javelin Throw", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Decathlon", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "Heptathlon", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "20km Race Walk", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Athletics", event: "35km Race Walk Mixed Team", gender: "Mixed", notes: "", className: "summer"},
+            
+            // Gymnastics
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Men's Floor Exercise", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Men's Pommel Horse", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Men's Still Rings", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Men's Vault", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Men's Parallel Bars", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Men's Horizontal Bar", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Men's Individual All-Around", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Men's Team All-Around", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Women's Vault", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Women's Uneven Bars", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Women's Balance Beam", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Women's Floor Exercise", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Women's Individual All-Around", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Artistic Gymnastics", event: "Women's Team All-Around", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rhythmic Gymnastics", event: "Individual All-Around", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rhythmic Gymnastics", event: "Group All-Around", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Trampoline", event: "Individual Trampoline", gender: "Men/Women", notes: "", className: "summer"},
+            
+            // Boxing
+            {season: "Summer", sport: "Boxing", event: "Men's 51kg Flyweight", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Men's 57kg Featherweight", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Men's 63.5kg Lightweight", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Men's 71kg Welterweight", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Men's 80kg Middleweight", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Men's 92kg Light Heavyweight", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Men's Over 92kg Heavyweight", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Women's 50kg Flyweight", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Women's 57kg Featherweight", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Women's 60kg Lightweight", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Women's 66kg Welterweight", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Boxing", event: "Women's 75kg Middleweight", gender: "Women", notes: "", className: "summer"},
+            
+            // Wrestling
+            {season: "Summer", sport: "Wrestling", event: "Men's Greco-Roman 60kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Greco-Roman 67kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Greco-Roman 77kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Greco-Roman 87kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Greco-Roman 97kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Greco-Roman 130kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 57kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 61kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 65kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 70kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 74kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 79kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 86kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 92kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 97kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Men's Freestyle 125kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Women's Freestyle 50kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Women's Freestyle 53kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Women's Freestyle 57kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Women's Freestyle 62kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Women's Freestyle 68kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Wrestling", event: "Women's Freestyle 76kg", gender: "Women", notes: "", className: "summer"},
+            
+            // Judo
+            {season: "Summer", sport: "Judo", event: "Men's 60kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Men's 66kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Men's 73kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Men's 81kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Men's 90kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Men's 100kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Men's Over 100kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Women's 48kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Women's 52kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Women's 57kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Women's 63kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Women's 70kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Women's 78kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Women's Over 78kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Judo", event: "Mixed Team Event", gender: "Mixed", notes: "", className: "summer"},
+            
+            // Taekwondo
+            {season: "Summer", sport: "Taekwondo", event: "Men's 58kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Taekwondo", event: "Men's 68kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Taekwondo", event: "Men's 80kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Taekwondo", event: "Men's Over 80kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Taekwondo", event: "Women's 49kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Taekwondo", event: "Women's 57kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Taekwondo", event: "Women's 67kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Taekwondo", event: "Women's Over 67kg", gender: "Women", notes: "", className: "summer"},
+            
+            // Fencing
+            {season: "Summer", sport: "Fencing", event: "Men's Individual Foil", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Men's Individual Épée", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Men's Individual Sabre", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Women's Individual Foil", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Women's Individual Épée", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Women's Individual Sabre", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Men's Team Foil", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Men's Team Épée", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Men's Team Sabre", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Women's Team Foil", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Women's Team Épée", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Fencing", event: "Women's Team Sabre", gender: "Women", notes: "", className: "summer"},
+            
+            // Ball Sports
+            {season: "Summer", sport: "Basketball", event: "Basketball", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Basketball", event: "3x3 Basketball", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Volleyball", event: "Volleyball", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Beach Volleyball", event: "Beach Volleyball", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Football", event: "Football", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Handball", event: "Handball", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rugby", event: "Rugby Sevens", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Field Hockey", event: "Field Hockey", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Tennis", event: "Singles", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Tennis", event: "Doubles", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Tennis", event: "Mixed Doubles", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Table Tennis", event: "Singles", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Table Tennis", event: "Team", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Table Tennis", event: "Mixed Doubles", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Badminton", event: "Singles", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Badminton", event: "Doubles", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Badminton", event: "Mixed Doubles", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Golf", event: "Individual Stroke Play", gender: "Men/Women", notes: "", className: "summer"},
+            
+            // Cycling
+            {season: "Summer", sport: "Cycling Track", event: "Individual Sprint", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Cycling Track", event: "Team Sprint", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Cycling Track", event: "Keirin", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Cycling Track", event: "Omnium", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Cycling Track", event: "Team Pursuit", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Cycling Track", event: "Madison", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Cycling Road", event: "Road Race", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Cycling Road", event: "Individual Time Trial", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Mountain Bike", event: "Cross-Country", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "BMX", event: "BMX Racing", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "BMX", event: "BMX Freestyle Park", gender: "Men/Women", notes: "", className: "summer"},
+            
+            // Rowing
+            {season: "Summer", sport: "Rowing", event: "Single Sculls", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rowing", event: "Double Sculls", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rowing", event: "Quadruple Sculls", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rowing", event: "Coxless Pair", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rowing", event: "Coxless Four", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rowing", event: "Eight", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Rowing", event: "Lightweight Double Sculls", gender: "Men/Women", notes: "", className: "summer"},
+            
+            // Canoe Sprint
+            {season: "Summer", sport: "Canoe Sprint", event: "Men's Kayak Single 200m", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Women's Kayak Single 200m", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Women's Kayak Single 500m", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Men's Kayak Single 1000m", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Men's Kayak Double 500m", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Women's Kayak Double 500m", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Men's Kayak Four 500m", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Women's Kayak Four 500m", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Men's Canoe Single 1000m", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Women's Canoe Single 200m", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Men's Canoe Double 500m", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Sprint", event: "Women's Canoe Double 500m", gender: "Women", notes: "", className: "summer"},
+            
+            // Canoe Slalom
+            {season: "Summer", sport: "Canoe Slalom", event: "Kayak Single", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Slalom", event: "Canoe Single", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Canoe Slalom", event: "Kayak Cross", gender: "Men/Women", notes: "", className: "summer"},
+            
+            // Sailing
+            {season: "Summer", sport: "Sailing", event: "Windsurfing iQFOiL", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Sailing", event: "Men's Skiff 49er", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Sailing", event: "Women's Skiff 49erFX", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Sailing", event: "Men's One Person Dinghy Laser", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Sailing", event: "Women's One Person Dinghy Laser Radial", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Sailing", event: "Mixed Two Person Dinghy 470", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Sailing", event: "Mixed Nacra 17 Foiling", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Sailing", event: "Mixed Formula Kite", gender: "Mixed", notes: "", className: "summer"},
+            
+            // Archery
+            {season: "Summer", sport: "Archery", event: "Individual", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Archery", event: "Team", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Archery", event: "Mixed Team", gender: "Mixed", notes: "", className: "summer"},
+            
+            // Shooting
+            {season: "Summer", sport: "Shooting", event: "10m Air Rifle", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "10m Air Rifle Mixed Team", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "50m Rifle 3 Positions", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "10m Air Pistol", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "10m Air Pistol Mixed Team", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "25m Rapid Fire Pistol", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "25m Pistol", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "Trap", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "Trap Mixed Team", gender: "Mixed", notes: "", className: "summer"},
+            {season: "Summer", sport: "Shooting", event: "Skeet", gender: "Men/Women", notes: "", className: "summer"},
+            
+            // Equestrian
+            {season: "Summer", sport: "Equestrian", event: "Individual Dressage", gender: "Open", notes: "", className: "summer"},
+            {season: "Summer", sport: "Equestrian", event: "Team Dressage", gender: "Open", notes: "", className: "summer"},
+            {season: "Summer", sport: "Equestrian", event: "Individual Jumping", gender: "Open", notes: "", className: "summer"},
+            {season: "Summer", sport: "Equestrian", event: "Team Jumping", gender: "Open", notes: "", className: "summer"},
+            {season: "Summer", sport: "Equestrian", event: "Individual Eventing", gender: "Open", notes: "", className: "summer"},
+            {season: "Summer", sport: "Equestrian", event: "Team Eventing", gender: "Open", notes: "", className: "summer"},
+            
+            // Modern Pentathlon, Triathlon
+            {season: "Summer", sport: "Modern Pentathlon", event: "Individual", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Triathlon", event: "Individual", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Triathlon", event: "Mixed Team Relay", gender: "Mixed", notes: "", className: "summer"},
+            
+            // Weightlifting
+            {season: "Summer", sport: "Weightlifting", event: "Men's 61kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Men's 67kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Men's 73kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Men's 81kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Men's 89kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Men's 96kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Men's 102kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Men's 109kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Men's Over 109kg", gender: "Men", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 45kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 49kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 55kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 59kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 64kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 71kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 76kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 81kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's 87kg", gender: "Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Weightlifting", event: "Women's Over 87kg", gender: "Women", notes: "", className: "summer"},
+            
+            // New Sports
+            {season: "Summer", sport: "Skateboarding", event: "Park", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Skateboarding", event: "Street", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Sport Climbing", event: "Combined", gender: "Men/Women", notes: "Tokyo 2020", className: "summer"},
+            {season: "Summer", sport: "Sport Climbing", event: "Speed", gender: "Men/Women", notes: "Paris 2024", className: "summer"},
+            {season: "Summer", sport: "Sport Climbing", event: "Boulder & Lead", gender: "Men/Women", notes: "Paris 2024", className: "summer"},
+            {season: "Summer", sport: "Surfing", event: "Shortboard", gender: "Men/Women", notes: "", className: "summer"},
+            {season: "Summer", sport: "Karate", event: "Kata", gender: "Men/Women", notes: "Tokyo 2020 only", className: "summer"},
+            {season: "Summer", sport: "Karate", event: "Men's 67kg Kumite", gender: "Men", notes: "Tokyo 2020 only", className: "summer"},
+            {season: "Summer", sport: "Karate", event: "Men's 75kg Kumite", gender: "Men", notes: "Tokyo 2020 only", className: "summer"},
+            {season: "Summer", sport: "Karate", event: "Men's Over 75kg Kumite", gender: "Men", notes: "Tokyo 2020 only", className: "summer"},
+            {season: "Summer", sport: "Karate", event: "Women's 55kg Kumite", gender: "Women", notes: "Tokyo 2020 only", className: "summer"},
+            {season: "Summer", sport: "Karate", event: "Women's 61kg Kumite", gender: "Women", notes: "Tokyo 2020 only", className: "summer"},
+            {season: "Summer", sport: "Karate", event: "Women's Over 61kg Kumite", gender: "Women", notes: "Tokyo 2020 only", className: "summer"},
+            {season: "Summer", sport: "Baseball", event: "Baseball", gender: "Men", notes: "Tokyo 2020", className: "summer"},
+            {season: "Summer", sport: "Softball", event: "Softball", gender: "Women", notes: "Tokyo 2020", className: "summer"},
+            
+            // Breaking (Paris 2024)
+            {season: "Summer", sport: "Breaking", event: "B-Boys", gender: "Men", notes: "Paris 2024", className: "new-2024"},
+            {season: "Summer", sport: "Breaking", event: "B-Girls", gender: "Women", notes: "Paris 2024", className: "new-2024"},
+            
+            // LA 2028 New Sports
+            {season: "Summer", sport: "Cricket", event: "T20", gender: "Men/Women", notes: "LA 2028", className: "new-2028"},
+            {season: "Summer", sport: "Baseball", event: "Baseball", gender: "Men", notes: "LA 2028", className: "new-2028"},
+            {season: "Summer", sport: "Softball", event: "Softball", gender: "Women", notes: "LA 2028", className: "new-2028"},
+            {season: "Summer", sport: "Flag Football", event: "Flag Football", gender: "Men/Women", notes: "LA 2028", className: "new-2028"},
+            {season: "Summer", sport: "Lacrosse", event: "Lacrosse Sixes", gender: "Men/Women", notes: "LA 2028", className: "new-2028"},
+            {season: "Summer", sport: "Squash", event: "Singles", gender: "Men/Women", notes: "LA 2028", className: "new-2028"},
+            
+            // Winter Olympics
+            {season: "Winter", sport: "Alpine Skiing", event: "Downhill", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Alpine Skiing", event: "Super-G", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Alpine Skiing", event: "Giant Slalom", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Alpine Skiing", event: "Slalom", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Alpine Skiing", event: "Alpine Combined", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Alpine Skiing", event: "Mixed Team Parallel", gender: "Mixed", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Cross-Country Skiing", event: "Sprint Classic", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "Sprint Free", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "10km Classic", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "15km Free", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "30km Skiathlon", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "50km Mass Start", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "Men's 4x10km Relay", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "Women's 4x5km Relay", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "Team Sprint Classic", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Cross-Country Skiing", event: "Team Sprint Free", gender: "Men/Women", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Ski Jumping", event: "Normal Hill Individual", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Ski Jumping", event: "Large Hill Individual", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Ski Jumping", event: "Large Hill Team", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Ski Jumping", event: "Mixed Team", gender: "Mixed", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Nordic Combined", event: "Individual Normal Hill/10km", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Nordic Combined", event: "Individual Large Hill/10km", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Nordic Combined", event: "Team Large Hill/4x5km", gender: "Men", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Biathlon", event: "Men's 10km Sprint", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Women's 7.5km Sprint", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Men's 12.5km Pursuit", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Women's 10km Pursuit", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Men's 20km Individual", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Women's 15km Individual", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Men's 15km Mass Start", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Women's 12.5km Mass Start", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Men's 4x7.5km Relay", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Women's 4x6km Relay", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Mixed Relay 4x6km", gender: "Mixed", notes: "", className: "winter"},
+            {season: "Winter", sport: "Biathlon", event: "Mixed Team Single Relay", gender: "Mixed", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Freestyle Skiing", event: "Moguls", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Freestyle Skiing", event: "Aerials", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Freestyle Skiing", event: "Ski Cross", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Freestyle Skiing", event: "Halfpipe", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Freestyle Skiing", event: "Slopestyle", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Freestyle Skiing", event: "Big Air", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Freestyle Skiing", event: "Mixed Team Aerials", gender: "Mixed", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Snowboarding", event: "Parallel Giant Slalom", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Snowboarding", event: "Halfpipe", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Snowboarding", event: "Slopestyle", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Snowboarding", event: "Snowboard Cross", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Snowboarding", event: "Mixed Team Snowboard Cross", gender: "Mixed", notes: "", className: "winter"},
+            {season: "Winter", sport: "Snowboarding", event: "Big Air", gender: "Men/Women", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Figure Skating", event: "Men's Singles", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Figure Skating", event: "Women's Singles", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Figure Skating", event: "Pairs", gender: "Mixed", notes: "", className: "winter"},
+            {season: "Winter", sport: "Figure Skating", event: "Ice Dance", gender: "Mixed", notes: "", className: "winter"},
+            {season: "Winter", sport: "Figure Skating", event: "Team Event", gender: "Mixed", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Speed Skating", event: "500m", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Speed Skating", event: "1000m", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Speed Skating", event: "1500m", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Speed Skating", event: "3000m", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Speed Skating", event: "5000m", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Speed Skating", event: "10,000m", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Speed Skating", event: "Team Pursuit", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Speed Skating", event: "Mass Start", gender: "Men/Women", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Short Track Speed Skating", event: "500m", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Short Track Speed Skating", event: "1000m", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Short Track Speed Skating", event: "1500m", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Short Track Speed Skating", event: "Men's 5000m Relay", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Short Track Speed Skating", event: "Women's 3000m Relay", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Short Track Speed Skating", event: "Mixed Team Relay", gender: "Mixed", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Ice Hockey", event: "Ice Hockey", gender: "Men/Women", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Curling", event: "Curling", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Curling", event: "Mixed Doubles Curling", gender: "Mixed", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Bobsleigh", event: "Two-Man Bobsleigh", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Bobsleigh", event: "Four-Man Bobsleigh", gender: "Men", notes: "", className: "winter"},
+            {season: "Winter", sport: "Bobsleigh", event: "Two-Woman Bobsleigh", gender: "Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Bobsleigh", event: "Women's Monobob", gender: "Women", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Skeleton", event: "Skeleton", gender: "Men/Women", notes: "", className: "winter"},
+            
+            {season: "Winter", sport: "Luge", event: "Singles Luge", gender: "Men/Women", notes: "", className: "winter"},
+            {season: "Winter", sport: "Luge", event: "Doubles Luge", gender: "Open", notes: "", className: "winter"},
+            {season: "Winter", sport: "Luge", event: "Team Relay", gender: "Mixed", notes: "", className: "winter"}
+        ];
+        
+        // Initialize table
+        function initTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            olympicEvents.forEach(event => {
+                const row = document.createElement('tr');
+                row.className = event.className;
+                row.innerHTML = `
+                    <td>${event.season}</td>
+                    <td>${event.sport}</td>
+                    <td>${event.event}</td>
+                    <td>${event.gender}</td>
+                    <td>${event.notes}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const tbody = document.getElementById('tableBody');
+            const visibleRows = Array.from(tbody.getElementsByTagName('tr')).filter(row => row.style.display !== 'none');
+            const summerEvents = visibleRows.filter(row => row.cells[0].textContent === 'Summer').length;
+            const winterEvents = visibleRows.filter(row => row.cells[0].textContent === 'Winter').length;
+            const uniqueSports = new Set(visibleRows.map(row => row.cells[1].textContent)).size;
+            
+            document.getElementById('stats').innerHTML = `
+                <strong>Statistics:</strong> 
+                Total Events: ${visibleRows.length} | 
+                Summer: ${summerEvents} | 
+                Winter: ${winterEvents} | 
+                Unique Sports: ${uniqueSports}
+            `;
+        }
+        
+        // Filter table
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const seasonValue = document.getElementById('seasonFilter').value;
+            const yearValue = document.getElementById('yearFilter').value;
+            const tbody = document.getElementById('tableBody');
+            const rows = tbody.getElementsByTagName('tr');
+            
+            Array.from(rows).forEach(row => {
+                const season = row.cells[0].textContent;
+                const sport = row.cells[1].textContent.toLowerCase();
+                const event = row.cells[2].textContent.toLowerCase();
+                const notes = row.cells[4].textContent.toLowerCase();
+                
+                let showRow = true;
+                
+                // Search filter
+                if (searchTerm && !sport.includes(searchTerm) && !event.includes(searchTerm)) {
+                    showRow = false;
+                }
+                
+                // Season filter
+                if (seasonValue && season !== seasonValue) {
+                    showRow = false;
+                }
+                
+                // Year filter
+                if (yearValue) {
+                    if (yearValue === 'Traditional' && (notes.includes('2024') || notes.includes('2028'))) {
+                        showRow = false;
+                    } else if (yearValue === '2024' && !notes.includes('2024')) {
+                        showRow = false;
+                    } else if (yearValue === '2028' && !notes.includes('2028')) {
+                        showRow = false;
+                    }
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
+            
+            updateStats();
+        }
+        
+        // Export to CSV
+        function exportToCSV() {
+            const tbody = document.getElementById('tableBody');
+            const visibleRows = Array.from(tbody.getElementsByTagName('tr')).filter(row => row.style.display !== 'none');
+            let csv = 'Season,Sport,Event,Gender,Notes\n';
+            
+            visibleRows.forEach(row => {
+                const cells = Array.from(row.cells);
+                const rowData = cells.map(cell => {
+                    const text = cell.textContent.replace(/"/g, '""');
+                    return `"${text}"`;
+                }).join(',');
+                csv += rowData + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'olympic_events.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('seasonFilter').addEventListener('change', filterTable);
+        document.getElementById('yearFilter').addEventListener('change', filterTable);
+        
+        // Initialize
+        initTable();
+        updateStats();
+    </script>
+</body>
+</html>
